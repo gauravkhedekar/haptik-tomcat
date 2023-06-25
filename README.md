@@ -97,6 +97,24 @@ kubectl create -f elastic_svc.yaml
 kubectl create -f elastic_deployment.yaml
 kubectl get pods
 kubectl describe ingress
+kubectl get ep => to see all svc get proper endpoints
+
+
+NOTE: please ignore if some service files having type of service as NodePort as I was testing the same. It should be ClusterIP as it is used by Ingress.
+
+Once deployed you can access app using "tomcat.example.com/tomcat-app-1.0-SNAPSHOT"
+
+Grafana using : grafana.example.com
+
+Kibana: kibana.example.com
+
+Prometheus: prometheus.example.com
+
+And I tried to install nginx to get a logs as I did not cover logs in custom tomcat so tried to simulate logs from nginx pod but something is not working for the same.
+
+You can see default page of nginx using : nginx.example.com
+
+Filebeat also install but not able to get logs in elasticsearch- it gave multiple errors as elastic search needs lot of memory and most of the time it was failing crashloop.
 
 
  
