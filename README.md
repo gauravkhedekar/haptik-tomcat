@@ -1,4 +1,12 @@
 # haptik-tomcat
+
+Worked on Virtualbox VM 
+
+Config: 
+Memory: 6 GB
+Disk: 40GB
+CPU: 4
+
 #Install minikube and docker
 
 apt install -y curl wget apt-transport-https
