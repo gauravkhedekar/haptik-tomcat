@@ -1,6 +1,6 @@
 # haptik-tomcat
 
-Worked on Virtualbox VM 
+Used Virtualbox VM 
 
 Config: 
 Memory: 6 GB
