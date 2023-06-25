@@ -1,0 +1,11 @@
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  host: kibana.example.com
+  tls:
+    - secretName: kibana-tls
+      hosts:
+        - kibana.example.com
+
+elasticsearchHosts: "http://elasticsearch:9200"

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: gitea
+  name: gitea
+#  namespace: argocd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitea
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: gitea
+    spec:
+      containers:
+      - image: gitea/gitea:latest
+        name: gitea
+        resources: {}
+        volumeMounts:
+        - name: gitea-vol
+          mountPath: /data
+      volumes:
+      - name: gitea-vol
+        persistentVolumeClaim:
+          claimName: gitea-pvc
+status: {}

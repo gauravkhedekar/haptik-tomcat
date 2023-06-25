@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kibana
+  template:
+    metadata:
+      labels:
+        app: kibana
+    spec:
+      containers:
+        - name: kibana
+          image: docker.elastic.co/kibana/kibana:7.14.1
+          resources:
+            limits:
+              memory: "1Gi"  # Limit memory to 1GB
+            requests:
+              memory: "1Gi"  # Allocate 1GB memory
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              value: http://elasticsearch:9200  # Use the address of your Elasticsearch deployment
+          ports:
+            - containerPort: 5601
