@@ -1,6 +1,6 @@
 # haptik-tomcat
 
-Used Virtualbox VM 
+Used Virtualbox VM Ubuntu 20.04 LTS
 
 Config: 
 Memory: 6 GB
