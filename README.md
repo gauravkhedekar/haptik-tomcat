@@ -27,11 +27,12 @@ minikube addons enable metrics-server
 
 NOTE DOWN: minikube ip
 
-Install Prometheus
-
-Install Prometheus using Helm package manager:
+```shell
 
 
+## Install Prometheus using Helm package manager:
+
+```shell
 curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 > get_helm.sh
 chmod 700 get_helm.sh
 ./get_helm.sh
@@ -43,12 +44,13 @@ helm search repo prometheus-community
 helm search repo prometheus-community | grep kube-prometheus
 
 helm install monitoring prometheus-community/kube-prometheus-stack
+```shell
 
+## Deploying the Tomcat Application
 
-Deploying the Tomcat Application
+## Under the tomcat directory, build the Tomcat welcome application:
 
-Under the tomcat directory, build the Tomcat welcome application:
-
+```shell
 apt install maven
 
 mvn clean package
@@ -64,21 +66,24 @@ docker run -d -p 8080:8080 haptiktomcat
 
 eval $(minikube docker-env)
 
-Configuring Nginx and Filebeat
+```shell
+
+
+## Configuring Nginx and Filebeat
+
+```shell
 
 Create ConfigMaps:
-
-
 
 kubectl create configmap nginx-config --from-file=nginx.conf
 kubectl create configmap filebeat-config --from-file=filebeat.yml
 
+
 Create the Nginx deployment and service:
-
-
 
 kubectl create -f nginx-deploy.yaml
 kubectl create -f nginx-svc.yaml
+
 
 Create the Tomcat deployment and service:
 
@@ -95,8 +100,8 @@ Create the Ingress resource:
 
 kubectl create -f ingress.yaml
 
-Create the Filebeat DaemonSet:
 
+Create the Filebeat DaemonSet:
 
 kubectl create -f filebeat-daemonset.yaml
 
@@ -106,8 +111,9 @@ Create the Elasticsearch deployment and service:
 kubectl create -f elastic_svc.yaml
 kubectl create -f elastic_deployment.yaml
 
+```shell
 
-Accessing the Applications
+## Accessing the Applications
 
 Once deployed, you can access the applications using the following URLs:
 
@@ -121,6 +127,7 @@ Hosts File Configuration
 
 Make sure to update your /etc/hosts file with the following entries:
 
+```shell
 127.0.0.1 localhost
 127.0.1.1 gaurav-VirtualBox
 
@@ -131,6 +138,7 @@ Make sure to update your /etc/hosts file with the following entries:
 192.168.49.2 grafana.example.com 
 192.168.49.2 kibana.example.com
 
+```shell
 
 Note: Replace 192.168.49.2 with the actual IP of your minikube instance.
 
