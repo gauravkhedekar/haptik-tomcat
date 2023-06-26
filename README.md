@@ -1,19 +1,14 @@
-# haptik-tomcat
+# Used Virtualbox VM Ubuntu 20.04 LTS
 
-Used Virtualbox VM Ubuntu 20.04 LTS
+Config: Memory: 6 GB Disk: 40GB CPU: 4
 
-Config: 
-Memory: 6 GB
-Disk: 40GB
-CPU: 4
+## Install minikube and docker
 
-#Install minikube and docker
-
+```shell
 apt install -y curl wget apt-transport-https
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 install minikube-linux-amd64 /usr/local/bin/minikube
 minikube version
-
 
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 
@@ -25,136 +20,118 @@ sudo apt update
 
 sudo apt install docker-ce docker-ce-cli containerd.io
 
-
 minikube start --addons=ingress --cpus=4 --cni=flannel --install-addons=true --kubernetes-version=stable --memory=5g --driver=docker --force
-
 
 minikube addons enable metrics-server
 
 
-root@gaurav-VirtualBox:~# minikube ip
-192.168.49.2
+NOTE DOWN: minikube ip
 
+Install Prometheus
 
-===============================================================================
-
-########### Install prometheus:
-
-I have used helm package manager to install prometheus: and will try to use grafana dashboard ID for the monitoring and get promql as well.
-
+Install Prometheus using Helm package manager:
 
 
 curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 > get_helm.sh
-
 chmod 700 get_helm.sh
-
 ./get_helm.sh
 
-helm
-
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-
 helm repo list
-
 helm repo update
-
 helm search repo prometheus-community
-
 helm search repo prometheus-community | grep kube-prometheus
 
 helm install monitoring prometheus-community/kube-prometheus-stack
 
 
+Deploying the Tomcat Application
 
-
-
-############ Under tomcat directory do 
-
-Used Very basic tomcat welcome application used response.code(200) in the readiness and liveness probe.
+Under the tomcat directory, build the Tomcat welcome application:
 
 apt install maven
 
-"mvn clean package"  => this creates war file out of tomcat application
+mvn clean package
 
-and then do 
+Build the Docker image:
 
 docker build -t haptiktomcat .
 
+
+Run the Docker container:
+
 docker run -d -p 8080:8080 haptiktomcat
 
-eval $(minikube docker-env)  => After some reasearch - found that we need to set this as a variable for pushing image into local repo - exclusively for minikube.
+eval $(minikube docker-env)
+
+Configuring Nginx and Filebeat
+
+Create ConfigMaps:
 
 
-I tried to use gitea for git and jenkins to build this stuff but could not able to do it because of time contraints. You will find some files of gitea as well. Please ignore those files.
-
-Github repo:  https://github.com/gauravkhedekar/haptik-tomcat
-
-minikube image ls
-
-cd haptik-tomcat/
 
 kubectl create configmap nginx-config --from-file=nginx.conf
-
-kubectl create configmap nginx-config --from-file=nginx.conf
-
-kubectl get cm
-
 kubectl create configmap filebeat-config --from-file=filebeat.yml
+
+Create the Nginx deployment and service:
+
+
+
 kubectl create -f nginx-deploy.yaml
 kubectl create -f nginx-svc.yaml
+
+Create the Tomcat deployment and service:
+
 kubectl create -f deployment.yaml
-kubectl get deploy
+kubectl create -f svc.yaml
+
+Create the Kibana deployment and service:
+
 kubectl create -f kiban_deploy.yaml
 kubectl create -f kibana_svc.yaml
+
+
+Create the Ingress resource:
+
 kubectl create -f ingress.yaml
+
+Create the Filebeat DaemonSet:
+
+
 kubectl create -f filebeat-daemonset.yaml
+
+Create the Elasticsearch deployment and service:
+
+
 kubectl create -f elastic_svc.yaml
 kubectl create -f elastic_deployment.yaml
-kubectl get pods
-kubectl describe ingress
-kubectl get ep => to see all svc get proper endpoints
 
 
-NOTE: please ignore if some service files having type of service as NodePort as I was testing the same. It should be ClusterIP as it is used by Ingress.
+Accessing the Applications
 
-Once deployed you can access app using "tomcat.example.com/tomcat-app-1.0-SNAPSHOT"
+Once deployed, you can access the applications using the following URLs:
 
-Grafana using : grafana.example.com
+    Tomcat Application: tomcat.example.com/tomcat-app-1.0-SNAPSHOT
+    Grafana: grafana.example.com
+    Kibana: kibana.example.com
+    Prometheus: prometheus.example.com
+    Nginx Default Page: nginx.example.com
 
-Kibana: kibana.example.com
+Hosts File Configuration
 
-Prometheus: prometheus.example.com
+Make sure to update your /etc/hosts file with the following entries:
 
-And I tried to install nginx to get a logs as I did not cover logs in custom tomcat so tried to simulate logs from nginx pod but something is not working for the same.
+127.0.0.1 localhost
+127.0.1.1 gaurav-VirtualBox
 
-You can see default page of nginx using : nginx.example.com
-
-Filebeat also install but not able to get logs in elasticsearch- it gave multiple errors as elastic search needs lot of memory and most of the time it was failing crashloop.
-
-NOTE: to test use "minikube IP" <domain name mentioned above>
-
-In my case 192.168.49.2 is the minikube IP.
-
-Contents of hosts file to get DNS working for ingress domains.
-
-
-
-
-
-
-root@gaurav-VirtualBox:~# cat /etc/hosts
-127.0.0.1       localhost
-127.0.1.1       gaurav-VirtualBox
-
-
-192.168.49.2 gitea.example.com
-
-192.168.49.2 nginx.example.com
-
-192.168.49.2 tomcat.example.com
-
-192.168.49.2 prometheus.example.com
-
-192.168.49.2 grafana.example.com
-
+192.168.49.2 gitea.example.com 
+192.168.49.2 nginx.example.com 
+192.168.49.2 tomcat.example.com 
+192.168.49.2 prometheus.example.com 
+192.168.49.2 grafana.example.com 
 192.168.49.2 kibana.example.com
+
+
+Note: Replace 192.168.49.2 with the actual IP of your minikube instance.
+
+Please note that some service files may have the type of service as NodePort as it was used for testing. It should be ClusterIP for use with Ingress.
