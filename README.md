@@ -27,7 +27,7 @@ minikube addons enable metrics-server
 
 NOTE DOWN: minikube ip
 
-```shell
+```
 
 
 ## Install Prometheus using Helm package manager:
@@ -44,7 +44,7 @@ helm search repo prometheus-community
 helm search repo prometheus-community | grep kube-prometheus
 
 helm install monitoring prometheus-community/kube-prometheus-stack
-```shell
+```
 
 ## Deploying the Tomcat Application
 
@@ -66,7 +66,7 @@ docker run -d -p 8080:8080 haptiktomcat
 
 eval $(minikube docker-env)
 
-```shell
+```
 
 
 ## Configuring Nginx and Filebeat
@@ -111,7 +111,7 @@ Create the Elasticsearch deployment and service:
 kubectl create -f elastic_svc.yaml
 kubectl create -f elastic_deployment.yaml
 
-```shell
+```
 
 ## Accessing the Applications
 
@@ -138,7 +138,7 @@ Make sure to update your /etc/hosts file with the following entries:
 192.168.49.2 grafana.example.com 
 192.168.49.2 kibana.example.com
 
-```shell
+```
 
 Note: Replace 192.168.49.2 with the actual IP of your minikube instance.
 
