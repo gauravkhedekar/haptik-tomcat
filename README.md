@@ -76,7 +76,7 @@ eval $(minikube docker-env)
 Create ConfigMaps:
 
 kubectl create configmap nginx-config --from-file=nginx.conf
-kubectl create configmap filebeat-config --from-file=filebeat.yml
+
 
 
 Create kibana. elasticsearch, logstash, filebeat
