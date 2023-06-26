@@ -37,15 +37,22 @@ I have used helm package manager to install prometheus: and will try to use graf
 
 
 curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 > get_helm.sh
-chmod 700 get_helm.sh
-./get_helm.sh
-helm
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo list
-helm repo update
-helm search repo prometheus-community
-helm search repo prometheus-community | grep kube-prometheus
 
+chmod 700 get_helm.sh
+
+./get_helm.sh
+
+helm
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+helm repo list
+
+helm repo update
+
+helm search repo prometheus-community
+
+helm search repo prometheus-community | grep kube-prometheus
 
 helm install monitoring prometheus-community/kube-prometheus-stack
 
