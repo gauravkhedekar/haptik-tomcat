@@ -79,9 +79,29 @@ kubectl create configmap nginx-config --from-file=nginx.conf
 kubectl create configmap filebeat-config --from-file=filebeat.yml
 
 
+Create kibana. elasticsearch, logstash, filebeat
+
+I have created folder with respect to service  kibana. elasticsearch, logstash, filebeat.
+
+go to each directory one by one and run commands.
+
+cd logstash
+helm install logstash .
+
+cd elasticsearch
+helm install elasticsearch .
+
+cd filebeat
+helm install filebeat .
+
+cd kibana
+helm install kibana .
+
+
+
 Create the Nginx deployment and service:
 
-kubectl create -f nginx-deploy.yaml
+kubectl create -f nginx-deploy.yaml 
 kubectl create -f nginx-svc.yaml
 
 
@@ -90,10 +110,6 @@ Create the Tomcat deployment and service:
 kubectl create -f deployment.yaml
 kubectl create -f svc.yaml
 
-Create the Kibana deployment and service:
-
-kubectl create -f kiban_deploy.yaml
-kubectl create -f kibana_svc.yaml
 
 
 Create the Ingress resource:
@@ -101,15 +117,6 @@ Create the Ingress resource:
 kubectl create -f ingress.yaml
 
 
-Create the Filebeat DaemonSet:
-
-kubectl create -f filebeat-daemonset.yaml
-
-Create the Elasticsearch deployment and service:
-
-
-kubectl create -f elastic_svc.yaml
-kubectl create -f elastic_deployment.yaml
 
 ```
 
